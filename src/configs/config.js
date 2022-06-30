@@ -4,8 +4,13 @@
  * Override any existing config value in system/config/config.js
  * @type {{}}
  */
+const path = require( 'path' );
+
 module.exports.config = {
     JWT_SECRET: process.env.JWT_SECRET || 'S0M3S3CR3TK3Y',
     JWT_EXPIRY: 172800,
-    PORT: process.env.PORT || 5001
+    PORT: process.env.PORT || 5001,
+    UPLOAD_PATH: path.resolve( `${__dirname }/../uploads` ),
+
+
 };

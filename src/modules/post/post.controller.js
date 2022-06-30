@@ -18,6 +18,8 @@ class PostController extends CalmController {
 
     async getAll( req, res, next ) {
         try {
+            console.log( req );
+            console.log( req.query );
             // Example passing Populate Fields on method itself. To set global Populate refer to Service File
             const response = await this.service.getAll( req.query, {
                 populateFields: [
@@ -25,6 +27,7 @@ class PostController extends CalmController {
                     { path: 'updatedBy', select: 'name email' }
                 ]
             } );
+            console.log(response);
             res.sendCalmResponse( response.data.map( x => new this.dto.GetDTO( x ) ), { 'totalCount': response.total } );
         } catch ( e ) {
             next( e );

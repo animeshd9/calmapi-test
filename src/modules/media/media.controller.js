@@ -4,19 +4,38 @@ const { MediaService } = require( './media.service' );
 const { Media } = require( './media.model' );
 const autoBind = require( 'auto-bind' );
 const multer = require( 'multer' );
-
+const config = require( '../../configs/config' );
 const { S3Upload } = require('../../plugins');
 const { CalmError } = require('../../../system/core/CalmError');
-
+const fs = require( 'fs' );
+const utils = require( '../../utils/index' );
 const mediaService = new MediaService(
     new Media().getInstance()
 );
 
 class MediaController extends CalmController {
-    // file upload using multer
-    storage = multer.memoryStorage( {
-        'destination': function( req, file, callback ) {
-            callback( null, '' );
+    // file upload using multer for amazon s3
+    // storage = multer.memoryStorage( {
+    //     'destination': function( req, file, callback ) {
+    //         callback( null, '' );
+    //     }
+    // } );
+    storage = multer.diskStorage( {
+        'destination': function( req, file, cb ) {
+            const dir = config.config.UPLOAD_PATH;
+       
+
+            fs.exists( dir, ( exist ) => {
+                if ( !exist ) {
+                    return fs.mkdir( dir, ( error ) => cb( error, dir ) );
+                }
+                return cb( null, dir );
+            } );
+        },
+        'filename': function( req, file, cb ) {
+            const fileOriginalName = utils.slugify( file.originalname );
+
+            cb( null, `${( new Date() ).getTime() }-${ fileOriginalName}` );
         }
     } );
 
@@ -32,14 +51,31 @@ class MediaController extends CalmController {
         this.S3Upload = new S3Upload();
         autoBind( this );
     }
-
+    // for amazon s3
+    // async insert( req, res, next ) {
+    //     try {
+    //         if(!req.file) {
+    //             throw new CalmError('VALIDATION_ERROR', 'File is required');
+    //         }
+    //         const { key } = await this.S3Upload.uploadFile( req.file.buffer, req.file.originalname, { ACL: 'public-read', pathPrefix: 'uploads' } );
+    //         const response = await this.service.insert( { ...req.file, 'path': key } );
+    //         res.sendCalmResponse(response.data);
+    //     } catch ( e ) {
+    //         next( e );
+    //     }
+    // }
     async insert( req, res, next ) {
         try {
-            if(!req.file) {
+            console.log( 'insert' );
+            if( !req.file ) {
                 throw new CalmError('VALIDATION_ERROR', 'File is required');
             }
-            const { key } = await this.S3Upload.uploadFile( req.file.buffer, req.file.originalname, { ACL: 'public-read', pathPrefix: 'uploads' } );
-            const response = await this.service.insert( { ...req.file, 'path': key } );
+            const uploadPath = config.UPLOAD_PATH;
+
+            req.file.path = req.file.path.split( `${uploadPath }/` )[ 1 ];
+            const response = await this.service.insert( req.file );
+
+            // return res.status( response.statusCode ).json( response );
             res.sendCalmResponse(response.data);
         } catch ( e ) {
             next( e );

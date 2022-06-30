@@ -27,6 +27,7 @@ class CalmController {
 
         try {
             const response = await this.service.get( id );
+            // console.log( response );
 
             res.sendCalmResponse( new this.dto.GetDTO( response.data ) );
         } catch ( e ) {
