@@ -54,8 +54,21 @@ class InsertDTO {
 
 class UpdateDTO {
     constructor( { ...props } ) {
-        this.title = props.title;
-        this.content = props.content;
+        this.Srno = props.Srno;
+        this.RecipeName = props.RecipeName;
+        this.TranslatedRecipeName = props.TranslatedRecipeName;
+        this.Ingredients = props.Ingredients;
+        this.TranslatedIngredients = props.TranslatedIngredients;
+        this.PrepTimeInMins = props.PrepTimeInMins;
+        this.CookTimeInMins = props.CookTimeInMins;
+        this.TotalTimeInMins = props.TotalTimeInMins;
+        this.Servings = props.Servings;
+        this.Cuisine = props.Cuisine;
+        this.Course = props.Course;
+        this.Diet = props.Diet;
+        this.Instructions = props.Instructions;
+        this.TranslatedInstructions = props.TranslatedInstructions;
+        this.URL = props.URL;
         // Auto Generated Fields
         this.updatedBy = props.updatedBy;
         // Delete Fields which are not present in data
