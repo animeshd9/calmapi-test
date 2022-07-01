@@ -14,6 +14,7 @@ require('./system/configs/database');
 const { server } = require('./system/configs/server');
 const { config } = require('./system/configs/config');
 
+
 const PORT = process.env.PORT || config.PORT;
 server.listen(PORT).on('error', (err) => {
     console.log(chalk.red('✘ Sorry!! Something just broke.'));
@@ -22,4 +23,6 @@ server.listen(PORT).on('error', (err) => {
 }).on('listening', () => {
     console.log(chalk.greenBright('✔ Listening on port', PORT));
     console.log(chalk.greenBright.bold(`✔ Endpoint Base URL: http://127.0.0.1:${PORT}`));
+    console.log(chalk.greenBright.bold(`✔ Swagger Base URL: http://127.0.0.1:${PORT}/api-docs`));
+
 });

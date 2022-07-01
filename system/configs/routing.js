@@ -4,6 +4,8 @@ const { CalmError } = require('../core');
 const packageJson = require('../../package.json');
 const humanizeString = require( 'humanize-string' );
 const { sanitizerMiddleware } = require('../helpers/sanitizer-middleware');
+const openapiSpecification = require('./swagger.json');
+const swaggerUi = require('swagger-ui-express');
 
 module.exports.setRoutes = (app) => {
 
@@ -14,7 +16,7 @@ module.exports.setRoutes = (app) => {
     app.get('/', (req, res) => {
         res.json({ status: true, message: `Welcome to the ${packageJson.name}` });
     });
-
+    console.log(openapiSpecification);
     /**
      * Sanitize Data before passing to the Routes
      */
@@ -30,6 +32,11 @@ module.exports.setRoutes = (app) => {
      * Serving Static files from uploads directory.
      */
     // app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+    /**
+     * Swagger documentation
+     */
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
     /**
      * If No route matches. Send user a 404 page

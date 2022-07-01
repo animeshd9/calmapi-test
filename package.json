@@ -30,6 +30,8 @@
     "multer": "^1.4.3",
     "nodemon": "^2.0.18",
     "pluralize": "^8.0.0",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.4.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
