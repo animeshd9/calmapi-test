@@ -71,6 +71,7 @@ class MediaController extends CalmController {
                 throw new CalmError('VALIDATION_ERROR', 'File is required');
             }
             const uploadPath = config.UPLOAD_PATH;
+            console.log( ' insert ' );
 
             req.file.path = req.file.path.split( `${uploadPath }/` )[ 1 ];
             const response = await this.service.insert( req.file );

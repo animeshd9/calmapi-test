@@ -4,7 +4,7 @@ const { CalmError } = require('../core');
 const packageJson = require('../../package.json');
 const humanizeString = require( 'humanize-string' );
 const { sanitizerMiddleware } = require('../helpers/sanitizer-middleware');
-const openapiSpecification = require('./swagger.json');
+const openapiSpecification = require('./swagger');
 const swaggerUi = require('swagger-ui-express');
 
 module.exports.setRoutes = (app) => {
